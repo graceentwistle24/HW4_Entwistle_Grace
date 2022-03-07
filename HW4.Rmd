@@ -37,8 +37,7 @@ total.disasters <- disasters %>%
   )
 
 ```
-Using the data from NASA’s GeoCoded Disaster dataset from 1960 - 2018, I created a map of the World to show which countries had the most disasters overall from 1960-2018. The totals are calculated by adding up each of the disasters, regardless of type, for each country. I am utilizing a plotly map for the interactivity of showing the country and total numebr of disasters when you hover over an area.
-
+Using the data from NASA’s GeoCoded Disaster dataset from 1960 - 2018, I created a map of the World to show which countries had the most disasters overall from 1960-2018.
 The data can be found at this URL: https://sedac.ciesin.columbia.edu/data/set/pend-gdis-1960-2018#:~:text=The%20Geocoded%20Disasters%20(GDIS)%20Dataset,the%20years%201960%20to%202018.
 
 In each of the below tables, you can see the total  number of natural disasters, by type, each country (or state) has had from 1960 - 2018. Specifically I used DT package for the Country table because I like the search bar, as well as the tab format to view the different countries and find which one you are looking for. For the state table, I utilized the kableExtra package because of the scroll function, which takes up less space on the webpage, but still shows all states easily. This made sense specifically for the states table because there are less states than countries to scroll through to find what you are looking for.
