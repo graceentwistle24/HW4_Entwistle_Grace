@@ -1,0 +1,75 @@
+---
+title: "Tables Assignment"
+author: "Grace Entwistle"
+date: "3/7/2022"
+output: html_document
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r data/packages,message=FALSE}
+library(tidyverse)
+library(DT)
+library(knitr)
+library(kableExtra)
+
+##read in data
+disasters <- read.csv("C:/Users/grace/OneDrive/Documents/MSStats/STAA566/World Disaster Data 1960-2018.csv")
+
+disasters["country"][disasters["country"] == "United States"] <- "USA"
+disasters["country"][disasters["country"] == "Republic Of Congo"] <- "Democratic Republic of the Congo"
+disasters["country"][disasters["country"] == "Republic Of The Congo"] <- "Democratic Republic of the Congo"
+
+disasters <- disasters %>% 
+  subset(disastertype != "mass movement (dry)")
+
+total.disasters <- disasters %>% 
+  group_by(country) %>% 
+  summarise(
+    "TotalNum" = n()
+  )
+
+```
+
+```{r}
+by.country <- disasters %>% 
+  group_by(country, disastertype) %>% 
+  summarise(TotalNum = n())
+by.country <- pivot_wider(by.country, names_from = disastertype, values_from = TotalNum)
+by.country[is.na(by.country)] <- 0
+
+
+world.table <- by.country %>%
+  datatable(colnames = c("Country", "Droughts", "Earthquakes", "Extreme Temperatures", "Floods", "Landslides", "Storms", "Volcanic Activity"))
+world.table
+```
+
+
+```{r}
+US.disasters <- disasters %>% 
+  subset(country == "USA")
+
+US.disasters$disastertype <- as.factor(US.disasters$disastertype)
+
+by.state <- US.disasters %>% 
+  group_by(adm1, disastertype) %>% 
+  summarise(TotalNum = n())
+by.state <- pivot_wider(by.state, names_from = disastertype, values_from = TotalNum)
+by.state[is.na(by.state)] <- 0
+
+state.tbl <- by.state %>%
+  kbl(col.names = c("State", "Droughts", "Earthquakes", "Extreme Temperatures", "Floods", "Landslides", "Storms", "Volcanic Activity"),
+      align = c("l","r","r","r","r","r")) %>% 
+  kable_styling(fixed_thead = TRUE) %>%
+  scroll_box(width = "100%", height = "400px")
+
+state.tbl
+```
+
